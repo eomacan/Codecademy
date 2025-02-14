@@ -1,0 +1,46 @@
+/* General Styles */
+body {
+    font-family: Helvetica;
+}
+
+/* Header Styles */
+.header {
+    background-image: url(../img/pattern.jpeg);
+    text-align: center;
+    color: khaki;
+    font-size: 100px;
+    font-weight: bold;
+}
+
+.item-header {
+    background-color: black;
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+#brushes .item-header {
+    background-color: mediumspringgreen;
+}
+
+#frames .item-header {
+    background-color: lightcoral;
+}
+
+#paint .item-header {
+    background-color: skyblue;
+}
+
+.item-desc {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.item-details {
+    font-size: 16px;
+}
+
+.item-price {
+    font-weight: bold;
+    color: blue;
+}
