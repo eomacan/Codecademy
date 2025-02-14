@@ -1,3 +1,12 @@
+const STRAND_LENGTH = 15;
+const DNA_BASES = ['A', 'T', 'C', 'G'];
+const BASE_COMPLEMENTS = {
+  'A': 'T',
+  'T': 'A',
+  'C': 'G',
+  'G': 'C'
+};
+
 // Generate Random Integer >= 0 and < maxInt
 const randomInt = (maxInt) => {
   return Math.floor(Math.random() * maxInt);
@@ -5,14 +14,13 @@ const randomInt = (maxInt) => {
 
 // Returns a random DNA base
 const returnRandBase = () => {
-  const dnaBases = ['A', 'T', 'C', 'G'];
-  return dnaBases[randomInt(4)];
+  return DNA_BASES[randomInt(4)];
 };
 
 // Returns a random single strand of DNA containing 15 bases
 const mockUpStrand = () => {
   const newStrand = [];
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < STRAND_LENGTH; i++) {
     newStrand.push(returnRandBase());
   }
   return newStrand;
@@ -24,7 +32,7 @@ const PAequor = {
   dna: [],
 
   mutate() {
-    let baseIdx = randomInt(15);
+    let baseIdx = randomInt(STRAND_LENGTH);
     let baseFrom = this.dna[baseIdx];
     let baseTo;
 
@@ -71,8 +79,8 @@ const PAequor = {
   willLikelySurvive () {
     let numCG = 0;
     let likeliness;
-
     this.dna.forEach(e => {
+
       if (e === 'C' || e === 'G') 
         numCG++;
     });
@@ -83,8 +91,13 @@ const PAequor = {
     return likeliness >= 60.0;
   },
 
+  complementStrand() {
+    return this.dna.map(e => BASE_COMPLEMENTS[e]);
+  },
+
   toString() {
-    return `{ specimenNum: ${this.specimenNum}, dna: [${this.dna.join(',')}] }`;
+    return `{ specimenNum: ${this.specimenNum}, dna: [${this.dna}] }`;
+//    return this.specimenNum.toString() + ' ' + this.dna.toString();
   }
 
 };
@@ -107,7 +120,7 @@ function createSpeciesLikelyToSurvive(batchSize) {
   for (let i = 0; i < batchSize; i++) {
     
     do {
-      pa = pAequorFactory(i+1, mockUpStrand());
+      pa = pAequorFactory(i+1, mockUpStrand(STRAND_LENGTH));
     } while (!pa.willLikelySurvive());
     
     // console.log(pa.toString());
@@ -122,22 +135,25 @@ function createSpeciesLikelyToSurvive(batchSize) {
 
 // console.log(mockUpStrand());
 
-const pa1 = pAequorFactory(1, mockUpStrand());
-const pa2 = pAequorFactory(2, mockUpStrand());
+const pa1 = pAequorFactory(1, mockUpStrand(STRAND_LENGTH));
+const pa2 = pAequorFactory(2, mockUpStrand(STRAND_LENGTH));
 
-console.log(pa1.specimenNum, pa1.dna);
-console.log(pa2.specimenNum, pa2.dna);
+console.log(pa1.toString());
+console.log(pa2.toString());
 
 pa1.mutate();
 
-console.log(pa1.specimenNum, pa1.dna);
-console.log(pa2.specimenNum, pa2.dna);
+console.log(pa1.toString());
+console.log(pa2.toString());
 
+pa1.compareDNA(pa1);
 pa1.compareDNA(pa2);
 
 pa1.willLikelySurvive();
 pa2.willLikelySurvive();
 
-const paBatch = createSpeciesLikelyToSurvive(30);
-console.log(paBatch.join('\n'));
+// const paBatch = createSpeciesLikelyToSurvive(30);
+// console.log(paBatch.join('\n'));
+
+console.log(pa1.complementStrand());
 
