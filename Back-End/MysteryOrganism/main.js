@@ -4,7 +4,7 @@ const returnRandBase = () => {
   return dnaBases[Math.floor(Math.random() * 4)];
 };
 
-// Returns a random single stand of DNA containing 15 bases
+// Returns a random single strand of DNA containing 15 bases
 const mockUpStrand = () => {
   const newStrand = [];
   for (let i = 0; i < 15; i++) {
@@ -68,9 +68,24 @@ const PAequor = {
   },
 
   willLikelySurvive () {
-    
+    let numCG = 0;
+    let likeliness;
+
+    this.dna.forEach(e => {
+      if (e === 'C' || e === 'G') 
+        numCG++;
+    });
+
+    likeliness = Math.round(numCG / this.dna.length * 10000) / 100;  
+
+    // console.log(`Specimen #${this.specimenNum} has ${numCG} 'C' or 'G's out of ${this.dna.length} elements.\nIts likeliness to survive is ${likeliness}%.`);
+    return likeliness >= 60.0;
+  },
+
+  toString() {
+    return `{ specimenNum: ${this.specimenNum}, dna: [${this.dna.join(',')}] }`;
   }
-  
+
 };
 
 function pAequorFactory(specimenNum, dna) {
@@ -82,9 +97,27 @@ function pAequorFactory(specimenNum, dna) {
   return pa;
 }
 
+function createSpeciesLikelyToSurvive(batchSize) {
+  let batch = [];
+  let pa;
+
+  console.log(`Create a batch of ${batchSize} specie DNAs likely to survive.`);
+
+  for (let i = 0; i < batchSize; i++) {
+    
+    do {
+      pa = pAequorFactory(i+1, mockUpStrand());
+    } while (!pa.willLikelySurvive());
+    
+    // console.log(pa.toString());
+
+    batch.push(pa);
+  }
+
+  return batch;
+}
 
 // Testing codes to be deleted from the final project
-
 
 // console.log(mockUpStrand());
 
@@ -101,6 +134,9 @@ console.log(pa2.specimenNum, pa2.dna);
 
 pa1.compareDNA(pa2);
 
+pa1.willLikelySurvive();
+pa2.willLikelySurvive();
 
-
+const paBatch = createSpeciesLikelyToSurvive(30);
+console.log(paBatch.join('\n'));
 
