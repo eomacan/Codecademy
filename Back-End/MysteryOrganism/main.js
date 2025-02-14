@@ -1,7 +1,12 @@
+// Generate Random Integer >= 0 and < maxInt
+const randomInt = (maxInt) => {
+  return Math.floor(Math.random() * maxInt);
+}
+
 // Returns a random DNA base
 const returnRandBase = () => {
   const dnaBases = ['A', 'T', 'C', 'G'];
-  return dnaBases[Math.floor(Math.random() * 4)];
+  return dnaBases[randomInt(4)];
 };
 
 // Returns a random single strand of DNA containing 15 bases
@@ -13,27 +18,23 @@ const mockUpStrand = () => {
   return newStrand;
 };
 
+// PAequror Object
 const PAequor = {
   specimenNum: 0,
   dna: [],
 
   mutate() {
-    let baseFrom = returnRandBase();
+    let baseIdx = randomInt(15);
+    let baseFrom = this.dna[baseIdx];
     let baseTo;
 
     do {
       baseTo = returnRandBase();
     } while (baseFrom === baseTo);   // find a different base to mutate to
 
-    console.log(`Mutating specimen #${this.specimenNum} DNA base ${baseFrom}s to ${baseTo}s.`);
+    console.log(`Mutating specimen #${this.specimenNum} DNA base ${baseFrom} @${baseIdx} to ${baseTo}`);
 
-    let dna = this.dna;
-
-    dna.forEach((e, i) => {
-      if (e === baseFrom) {
-        dna[i] = baseTo;
-      }
-    });
+    this.dna[baseIdx] = baseTo;
 
     return this.dna;
   },
